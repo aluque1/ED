@@ -14,11 +14,12 @@ Se nos pide un juego donde dos jugadores van diciendo letras, cuando uno repita 
 
 ---
 
-## 23.02.24
+## 23.01.24
 
 -[x] Cuestionario videos de primera semana
 -[] Ejercicio [wordle numerico](/ED/L01/L01.pdf) <- a terminar en casa
 
-
+## 29.01.24
+-[x] Cuestionario videos de segunda semana
 
 
