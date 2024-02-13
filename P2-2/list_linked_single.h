@@ -91,6 +91,8 @@ public:
     display(std::cout);
   }
 
+  void invert();
+
 private:
   Node *head;
 
@@ -183,5 +185,16 @@ void ListLinkedSingle::display(std::ostream &out) const {
   out << "]";
 }
 
+void ListLinkedSingle::invert(){
+  Node *curr = head;
+  Node *prev = nullptr;
+  while(curr != nullptr){
+    Node *sig = curr->next;
+    curr->next = prev; 
+    prev = curr;
+    curr = sig;
+  }
+  head = prev;
+}
 
 #endif

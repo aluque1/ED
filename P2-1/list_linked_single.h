@@ -93,7 +93,7 @@ public:
 
   void duplicate();
 
-  void invertir();
+  void invert();
 
 private:
   Node *head;
@@ -189,17 +189,14 @@ void ListLinkedSingle::display(std::ostream &out) const {
 
 void ListLinkedSingle::duplicate() {
     Node *curr = head;
-
-    while(curr != nullptr){
-        Node *dupe = new Node;
-        dupe->value = curr->value;
-        dupe->next = curr->next;
-        curr->next = dupe;
-        curr = curr->next->next;
+    while (curr != nullptr) {
+        Node *new_node = new Node { curr->value, curr->next };
+        curr->next = new_node;
+        curr = new_node->next;
     }
 }
 
-void ListLinkedSingle::invertir(){
+void ListLinkedSingle::invert(){
   Node *curr = head;
   Node *prev = nullptr;
   while(curr != nullptr){
