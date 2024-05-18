@@ -190,7 +190,9 @@ void ListLinkedSingle::display(std::ostream &out) const {
 void ListLinkedSingle::duplicate() {
     Node *curr = head;
     while (curr != nullptr) {
-        Node *new_node = new Node { curr->value, curr->next };
+        Node *new_node = new Node;
+        new_node->value = curr->value;
+        new_node->next = curr->next;
         curr->next = new_node;
         curr = new_node->next;
     }

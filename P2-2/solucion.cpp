@@ -22,7 +22,7 @@ bool resuelveCaso()
     list.push_back(datos.substr(i, 1));
   }
 
-  list.invert();
+  list.revert();
   list.display();
 
   return true;
