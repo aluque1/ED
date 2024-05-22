@@ -11,8 +11,6 @@ class ListLinkedSingle{
         //head = nullptr;
     }
     bool ordenada() const;
-    void duplicate();
-    void inverse();
 
     int size() const { return num_elems; } //O(1) => O(n) si tuviesemos que recorrer la lista.
     void remove(int pos); //O(num_elems) 
@@ -29,8 +27,7 @@ class ListLinkedSingle{
         head = new Node {elem, head};
         num_elems++;
     }
-    void merge(ListLinkedSingle & l2);
-    void interseccion(const ListLinkedSingle & l2);
+    void intersect(const ListLinkedSingle & l2);
     void pop_back();
     const Type& front() const { assert(head != nullptr); return head->value;} //O(1)
     Type& front() { assert(head != nullptr); return head->value;} //O(1)
@@ -189,38 +186,34 @@ bool ListLinkedSingle<Type>::ordenada() const{
     return true;
 }
 
+// La complejidad de esta funcion es O(n) siendo n el número de elementos de la lista this
 template <class Type>
-void ListLinkedSingle<Type>::merge(ListLinkedSingle & l2) {
+void ListLinkedSingle<Type>::intersect(const ListLinkedSingle & l2) {
     assert( head != l2.head && ordenada() && l2.ordenada());
-    
-}
-
-
-template <class Type>
-void ListLinkedSingle<Type>::inverse(){
-    Node * prev = nullptr; //anterior nodo visitado
-    Node * cur = head;     //nodo actual visitado
-    while(cur != nullptr){
-        Node * sig = cur->next; //nodo siguiente a visitar.
-        cur->next = prev; //el nodo siguiente del actual pasa a ser el anterior.
-        prev = cur; //actualizamos los punteros, el anterior pasa a ser el actual.
-        cur = sig;  //el actual pasa a ser el siguiente.
+    Node * curr1 = head;
+    Node * curr2 = l2.head;
+    while(curr2 != nullptr){
+        if(curr1->value < curr2->value){
+            if(curr1 == head)
+                head = curr1->next;
+            curr1 = curr1->next;
+            num_elems--;
+        } else if (curr1->value > curr2->value){
+            curr2 = curr2->next;
+        } else {
+            curr1 = curr1->next;
+            curr2 = curr2->next;
+        }
     }
-    head = prev;
-}
-
-template <class Type>
-void ListLinkedSingle<Type>::duplicate(){
-    Node * cur = head;  //nodo actual visitado.
-    while(cur != nullptr){
-        cur->next = new Node {cur->value, cur->next}; //el siguiente del actual es el duplicado
-        cur = cur->next->next; //avanzo dos nodos para llegar al siguiente a duplicar.
-        num_elems++;
+    while(curr1 != nullptr){
+        Node * aux = curr1;
+        curr1 = curr1->next;
+        delete aux;
+        num_elems--;
     }
+
 }
 
-
-// O(N), siendo N el numero de elementos de las listas
 void tratar_caso() {
   // Implementar. Aquí se procesa cada caso de prueba
     int num1, num2;
@@ -239,31 +232,9 @@ void tratar_caso() {
         listOther.push_back(elem);
     }
 
-    ListLinkedSingle<int> listMerge;
-    int indexL1 = 0, indexL2 = 0;
-    int valorL1, valorL2;
-    
-    while(indexL1 < listThis.size() && indexL2 < listOther.size()){
-        valorL1 = listThis.at(indexL1);
-        valorL2 = listOther.at(indexL2);
-        if(valorL1 <= valorL2){
-            listMerge.push_back(valorL1);
-            indexL1++;
-        } else if(valorL1 > valorL2){
-            listMerge.push_back(valorL2);
-            indexL2++;
-        }
-    }
-
-    listMerge.display();
-
-
-    listThis.merge(listOther);
+    listThis.display();
     listOther.display();
-    listThis.display();
-    listThis.inverse();
-    listThis.display();
-    listThis.duplicate();
+    listThis.intersect(listOther);
     listThis.display();
     cout << endl;
     
