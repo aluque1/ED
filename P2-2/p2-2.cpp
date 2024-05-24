@@ -2,44 +2,25 @@
  * ---------------------------------------------------
  *                ESTRUCTURAS DE DATOS
  * ---------------------------------------------------
+ *              Manuel Montenegro Montes
  *              Facultad de Informática
  *         Universidad Complutense de Madrid
  * ---------------------------------------------------
  */
  
  /*
- * MUY IMPORTANTE: Para realizar este ejercicio solo podéis
- * modificar el código contenido entre las etiquetas <answer>
- * y </answer>. Toda modificación fuera de esas etiquetas está
- * prohibida, pues no se tendrá en cuenta para la corrección.
- *
- * Tampoco esta permitido modificar las líneas que contienen
- * las etiquetas <answer> y </answer>, obviamente :-)
- */
-
-
-//@ <answer>
-/*
-  Indica el nombre y apellidos de los componentes del grupo
-  ---------------------------------------------------------
-  Componente 1:
-  Componente 2:
-*/
-//@ </answer>
-
-#include <iostream>
-#include <fstream>
-#include <string>
+  * Implementación del TAD Lista mediante listas enlazadas simples.
+  *
+  * Versión inicial.
+  */
 #include <cassert>
-
-using namespace std;
-
-// Implementación del TAD lista utilizando listas enlazadas simples.
+#include <iostream>
+#include <string>
 
 class ListLinkedSingle {
 private:
   struct Node {
-    int value;
+    std::string value;
     Node *next;
   };
 
@@ -49,15 +30,12 @@ public:
     delete_list(head);
   }
 
-  ListLinkedSingle(const ListLinkedSingle &other)
-    : head(copy_nodes(other.head)) { }
-
-  void push_front(const int &elem) {
+  void push_front(const std::string &elem) {
     Node *new_node = new Node { elem, head };
     head = new_node;
   }
 
-  void push_back(const int &elem);
+  void push_back(const std::string &elem);
 
   void pop_front() {
     assert (head != nullptr);
@@ -74,44 +52,42 @@ public:
     return head == nullptr;
   };
   
-  const int & front() const {
+  const std::string & front() const {
     assert (head != nullptr);
     return head->value;
   }
 
-  int & front() {
+  std::string & front() {
     assert (head != nullptr);
     return head->value;
   }
 
-  const int & back() const {
+  const std::string & back() const {
     return last_node()->value;
   }
 
-  int & back() {
+  std::string & back() {
     return last_node()->value;
   }
   
-  const int & at(int index) const {
+  const std::string & at(int index) const {
     Node *result_node = nth_node(index);
     assert (result_node != nullptr);
     return result_node->value;
   }
 
-  int & at(int index) {
+  std::string & at(int index) {
     Node *result_node = nth_node(index);
     assert (result_node != nullptr);
     return result_node->value;
   }
-
-  // La función está declarada aquí, pero se implementa
-  // más abajo
-  void replicate(const ListLinkedSingle &ys);
 
   void display(std::ostream &out) const;
   void display() const {
     display(std::cout);
   }
+  
+  void reverse();
 
 private:
   Node *head;
@@ -119,18 +95,8 @@ private:
   void delete_list(Node *start_node);
   Node *last_node() const;
   Node *nth_node(int n) const;
-  Node *copy_nodes(Node *start_node) const;
 
 };
-
-ListLinkedSingle::Node * ListLinkedSingle::copy_nodes(Node *start_node) const {
-  if (start_node != nullptr) {
-    Node *result = new Node { start_node->value, copy_nodes(start_node->next) };
-    return result;
-  } else {
-    return nullptr;
-  }
-}
 
 void ListLinkedSingle::delete_list(Node *start_node) {
   if (start_node != nullptr) {
@@ -139,7 +105,7 @@ void ListLinkedSingle::delete_list(Node *start_node) {
   }
 }
 
-void ListLinkedSingle::push_back(const int &elem) {
+void ListLinkedSingle::push_back(const std::string &elem) {
   Node *new_node = new Node { elem, nullptr };
   if (head == nullptr) {
     head = new_node;
@@ -215,48 +181,16 @@ void ListLinkedSingle::display(std::ostream &out) const {
   out << "]";
 }
 
-
-//@ <answer>
-// ===========================================================
-// Escribe tu solución por debajo de esta línea
-// ===========================================================
-
-// Implementa aquí la función pedida. No olvides indicar el coste.
-void ListLinkedSingle::replicate(const ListLinkedSingle &ys) {
-
-}
-
-
-
-void tratar_caso() {
-  // Escribe aquí el código para tratar UN caso de prueba
-}
-
-//@ </answer>
-// ===========================================================
-// No modifiques nada por debajo de esta línea
-// ===========================================================
-
-
-int main() {
-#ifndef DOMJUDGE
-  std::ifstream in("sample.in");
-  auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
-  
-  // El primer dato leído indica el número de casos de prueba
-  int num_casos;
-  cin >> num_casos;
-
-  // Llamamos a tratar_caso tantas veces como indica num_caso
-  for (int i = 0; i < num_casos; i++) {
-    tratar_caso();
+void ListLinkedSingle::reverse(){
+  Node *curr = head;
+  Node *prev = nullptr;
+  while (curr != nullptr)
+  {
+    Node *next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
   }
-
-#ifndef DOMJUDGE
-  std::cin.rdbuf(cinbuf);
-#endif
-  return 0;
+  head = prev;
 }
-
 

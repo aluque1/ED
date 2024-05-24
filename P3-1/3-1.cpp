@@ -235,20 +235,27 @@ void ListLinkedDouble::detach(Node *node) {
   node->next = node->prev = nullptr;
 }
 
-
-// Tiene coste O(n) donde n es el indix del nodo que se quiere modificar. Esto se debe
+// Tiene coste O(n) donde n es el index del nodo que se quiere modificar. Esto se debe
 // a que nth_node recorre hasta que lleguemos a index
 void ListLinkedDouble::add_to(int index, int val) {
   Node *nodo = nth_node(index);
   nodo->value += val;
 
   Node *next = nodo->next;
+  Node *prev = nodo->prev;
   detach(nodo);
 
-  while (next != head && next->value < nodo->value) {
-    next = next->next;
+  if(prev->value > nodo->value) {
+    while(prev->value > nodo->value && prev != head) {
+      prev = prev->prev;
+    }
+    attach(nodo, prev->next);
+  } else {
+    while(next->value < nodo->value && next != head) {
+      next = next->next;
+    }
+    attach(nodo, next);
   }
-  attach(nodo, next);
 }
 
 
@@ -259,6 +266,30 @@ bool tratar_caso() {
   // Introduce aquí el código para tratar un caso de prueba.
   // Devuelve false si se ha leído la marca de fin de entrada;
   // true en caso contrario.
+
+  int N, i, m;
+
+  cin >> N;
+  cin >> i;
+  cin >> m;
+
+  if(N == 0 && i == 0 && m == 0) {
+    return false;
+  }
+
+  ListLinkedDouble lista;
+
+  for(int j = 0; j < N; j++) {
+    int elem;
+    cin >> elem;
+    lista.push_back(elem);
+  }
+
+  lista.add_to(i, m);
+
+  cout << lista << endl;
+
+  return true;
 }
 
 //---------------------------------------------------------------
@@ -268,17 +299,17 @@ bool tratar_caso() {
 
 
 int main() {
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+#endif */
   
   while(tratar_caso()) { }
 
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
   // Descomentar si se trabaja en Windows
   // system("PAUSE");
-#endif
+#endif */
   return 0;
 }

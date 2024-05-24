@@ -58,6 +58,36 @@ public:
 
   ~ListLinkedDouble() { delete_nodes(); }
 
+  void pivot(int pivote)
+  {
+    Node *current = head->next;
+    for(int i = 0; i < num_elems; ++i)
+    {
+      if (current->value > pivote)
+      {
+        Node *detatched = current;
+        Node *last = head->prev;
+
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+
+        Node *siguiente = current->next;
+
+        head->prev = detatched;
+        detatched->next = head;
+
+        detatched->prev = last;
+        last->next = detatched;
+
+        current = siguiente;
+      }
+      else
+      {
+        current = current->next;
+      }
+    }
+  }
+
   void push_front(const int &elem)
   {
     Node *new_node = new Node{elem, head->next, head};
@@ -153,37 +183,6 @@ public:
 
   void display() const { display(std::cout); }
 
-  //@ <answer>
-  //---------------------------------------------------------------
-  // Modificar a partir de aquí
-  // --------------------------------------------------------------
-  // Tiene coste O(n) siendo n el numero de elementos de la lista ya que la recorre entera
-  void ListLinkedDouble::pivot(int pivote)
-  {
-    Node *current = head->next;
-    Node *last = head->prev;
-    while (current != last)
-    {
-      if (current->value > pivote)
-      {
-        Node *next = current->next;
-        Node *prev = current->prev;
-        // Remove current node from the list
-        prev->next = next;
-        next->prev = prev;
-        // Move current node to the end
-        last->next = current;
-        current->prev = last;
-        current->next = head;
-        head->prev = current;
-        // Update last node
-        last = current;
-        // Move to the next node
-      }
-      current = current->next;
-    }
-  }
-
 private:
   Node *head;
   int num_elems;
@@ -191,6 +190,11 @@ private:
   Node *nth_node(int n) const;
   void delete_nodes();
   void copy_nodes_from(const ListLinkedDouble &other);
+
+  // Nuevos métodos
+  // Se implementan más abajo
+  static void attach(Node *node, Node *before);
+  static void detach(Node *node);
 };
 
 ListLinkedDouble::Node *ListLinkedDouble::nth_node(int n) const
@@ -256,7 +260,6 @@ std::ostream &operator<<(std::ostream &out, const ListLinkedDouble &l)
   l.display(out);
   return out;
 }
-
 //}}}
 
 bool tratar_caso()
@@ -264,6 +267,31 @@ bool tratar_caso()
   // Introduce aquí el código para tratar un caso de prueba.
   // Devuelve false si se ha leído la marca de fin de entrada;
   // true en caso contrario.
+
+  int N, i;
+
+  cin >> N;
+  cin >> i;
+
+  if (!cin)
+  {
+    return false;
+  }
+
+  ListLinkedDouble lista;
+
+  for (int j = 0; j < N; j++)
+  {
+    int elem;
+    cin >> elem;
+    lista.push_back(elem);
+  }
+
+  lista.pivot(i);
+
+  cout << lista << endl;
+
+  return true;
 }
 
 //---------------------------------------------------------------
@@ -273,19 +301,19 @@ bool tratar_caso()
 
 int main()
 {
-#ifndef DOMJUDGE
-  std::ifstream in("sample.in");
-  auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+  /* #ifndef DOMJUDGE
+    std::ifstream in("sample.in");
+    auto cinbuf = std::cin.rdbuf(in.rdbuf());
+  #endif */
 
   while (tratar_caso())
   {
   }
 
-#ifndef DOMJUDGE
-  std::cin.rdbuf(cinbuf);
-  // Descomentar si se trabaja en Windows
-  // system("PAUSE");
-#endif
+  /* #ifndef DOMJUDGE
+    std::cin.rdbuf(cinbuf);
+    // Descomentar si se trabaja en Windows
+    // system("PAUSE");
+  #endif */
   return 0;
 }

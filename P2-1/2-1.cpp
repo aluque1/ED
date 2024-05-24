@@ -13,10 +13,6 @@
   *
   * Versión inicial.
   */
-  
-#ifndef __LIST_LINKED_SINGLE_H
-#define __LIST_LINKED_SINGLE_H
-
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -198,16 +194,3 @@ void ListLinkedSingle::duplicate() {
     }
 }
 
-void ListLinkedSingle::invert(){
-  Node *curr = head;
-  Node *prev = nullptr;
-  while(curr != nullptr){
-    Node *sig = curr->next;
-    curr->next = prev; 
-    prev = curr;
-    curr = sig;
-  }
-  head = prev;
-}
-
-#endif

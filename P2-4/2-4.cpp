@@ -189,55 +189,70 @@ bool ListLinkedSingle<Type>::ordenada() const{
 // La complejidad de esta funcion es O(n) siendo n el número de elementos de la lista this
 template <class Type>
 void ListLinkedSingle<Type>::intersect(const ListLinkedSingle & l2) {
-    assert( head != l2.head && ordenada() && l2.ordenada());
-    Node * curr1 = head;
-    Node * curr2 = l2.head;
-    while(curr2 != nullptr){
-        if(curr1->value < curr2->value){
-            if(curr1 == head)
-                head = curr1->next;
-            curr1 = curr1->next;
+    Node *cur1 = head;
+    Node *cur2 = l2.head;
+    Node *prev = nullptr;
+
+    while (cur1 != nullptr && cur2 != nullptr) {
+        if (cur1->value < cur2->value) {
+            Node *temp = cur1;
+            cur1 = cur1->next;
+            delete temp;
+            if (prev == nullptr) {
+                head = cur1;
+            } else {
+                prev->next = cur1;
+            }
             num_elems--;
-        } else if (curr1->value > curr2->value){
-            curr2 = curr2->next;
+        } else if (cur1->value > cur2->value) {
+            cur2 = cur2->next;
         } else {
-            curr1 = curr1->next;
-            curr2 = curr2->next;
+            prev = cur1;
+            cur1 = cur1->next;
+            cur2 = cur2->next;
         }
     }
-    while(curr1 != nullptr){
-        Node * aux = curr1;
-        curr1 = curr1->next;
-        delete aux;
+
+    while (cur1 != nullptr) {
+        Node *temp = cur1;
+        cur1 = cur1->next;
+        delete temp;
+        if (prev == nullptr) {
+            head = cur1;
+        } else {
+            prev->next = cur1;
+        }
         num_elems--;
     }
-
 }
 
 void tratar_caso() {
-  // Implementar. Aquí se procesa cada caso de prueba
-    int num1, num2;
-    cin >> num1;
-    ListLinkedSingle<int> listThis;
-    ListLinkedSingle<int> listOther;
-    for (int i = 0; i < num1; i++) {
+    int num_elems;
+
+    cin >> num_elems;
+
+    ListLinkedSingle<int> lista1;
+    ListLinkedSingle<int> lista2;
+
+    for (int i = 0; i < num_elems; i++) {
         int elem;
         cin >> elem;
-        listThis.push_back(elem);
-    }
-    cin >> num2;
-    for (int i = 0; i < num2; i++) {
-        int elem;
-        cin >> elem;
-        listOther.push_back(elem);
+        lista1.push_back(elem);
     }
 
-    listThis.display();
-    listOther.display();
-    listThis.intersect(listOther);
-    listThis.display();
+    cin >> num_elems;
+
+    for (int i = 0; i < num_elems; i++) {
+        int elem;
+        cin >> elem;
+        lista2.push_back(elem);
+    }
+
+    lista1.intersect(lista2);
+
+    lista1.display();
+
     cout << endl;
-    
 }
 
 
@@ -247,10 +262,10 @@ void tratar_caso() {
 // ----------------------------------------------------------------
 
 int main() {
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+#endif */
 
   // Leemos el número de casos de prueba que vendrán a continuación
   int num_casos;
@@ -263,10 +278,9 @@ int main() {
     tratar_caso();
   }
 
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
  // system("PAUSE");
-#endif
+#endif */
   return 0;
 }
-

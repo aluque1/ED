@@ -41,7 +41,7 @@ public:
     {
         assert(head != nullptr);
         return head->value;
-    }                              // O(1)
+    } // O(1)
     const Type &back() const;      // O(N)
     Type &back();                  // O(N)
     const Type &at(int pos) const; // O(N)
@@ -235,53 +235,72 @@ bool ListLinkedSingle<Type>::ordenada() const
 template <class Type>
 void ListLinkedSingle<Type>::merge(ListLinkedSingle &l2)
 {
-    assert(head != l2.head && ordenada() && l2.ordenada());
-    Node *cur1 = head;
-    Node *cur2 = l2.head;
-    Node *prev = nullptr;
-    while (cur1 != nullptr && cur2 != nullptr)
+    Node *prev, *cur = head, *other = l2.head;
+    if (head == nullptr)
     {
-        if (cur1->value < cur2->value)
+        head = l2.head;
+    }
+    else if (l2.head != nullptr)
+    {
+        if (head->value <= l2.head->value)
         {
-            prev = cur1;
-            cur1 = cur1->next;
+            prev = head;
+            cur = head->next;
+            other = l2.head;
         }
         else
         {
-            prev->next = cur2;
-            prev = cur2;
-            cur2 = cur2->next;
-            prev->next = cur1;
-            num_elems++;
+            prev = l2.head;
+            cur = head;
+            other = l2.head->next;
+            head = l2.head;
+        }
+        while (cur != nullptr && other != nullptr)
+        {
+            if (cur->value <= other->value)
+            {
+                prev->next = cur;
+                prev = cur;
+                cur = cur->next;
+            }
+            else
+            {
+                prev->next = other;
+                prev = other;
+                other = other->next;
+            }
+        }
+        if (cur == nullptr)
+        {
+            prev->next = other;
+        }
+        else
+        {
+            prev->next = cur;
         }
     }
+    l2.head = nullptr;
 }
 
 void tratar_caso()
 {
-    // Implementar. Aquí se procesa cada caso de prueba
-    int num1, num2;
-    cin >> num1;
-    ListLinkedSingle<int> listThis;
-    ListLinkedSingle<int> listOther;
-    for (int i = 0; i < num1; i++)
+    ListLinkedSingle<int> lista1;
+    ListLinkedSingle<int> lista2;
+
+    int elem;
+    while (cin >> elem && elem != 0)
     {
-        int elem;
-        cin >> elem;
-        listThis.push_back(elem);
-    }
-    cin >> num2;
-    for (int i = 0; i < num2; i++)
-    {
-        int elem;
-        cin >> elem;
-        listOther.push_back(elem);
+        lista1.push_back(elem);
     }
 
-    listThis.display();
-    listOther.display();
-    listThis.merge(listOther);
-    listThis.display();
+    while (cin >> elem && elem != 0)
+    {
+        lista2.push_back(elem);
+    }
+
+    lista1.merge(lista2);
+
+    lista1.display();
     cout << endl;
 }
 
@@ -292,10 +311,10 @@ void tratar_caso()
 
 int main()
 {
-#ifndef DOMJUDGE
-    std::ifstream in("sample.in");
-    auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+    /* #ifndef DOMJUDGE
+        std::ifstream in("sample.in");
+        auto cinbuf = std::cin.rdbuf(in.rdbuf());
+    #endif */
 
     // Leemos el número de casos de prueba que vendrán a continuación
     int num_casos;
@@ -310,9 +329,9 @@ int main()
         tratar_caso();
     }
 
-#ifndef DOMJUDGE
-    std::cin.rdbuf(cinbuf);
-    // system("PAUSE");
-#endif
+    /* #ifndef DOMJUDGE
+        std::cin.rdbuf(cinbuf);
+        // system("PAUSE");
+    #endif */
     return 0;
 }
