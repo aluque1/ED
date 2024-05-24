@@ -56,6 +56,39 @@ public:
   ~ListLinkedDouble() { delete_nodes(); }
 
   void intersection(const ListLinkedDouble &l2){
+    Node *curr_l1 = head->next;
+    Node *curr_l2 = l2.head->next;
+    Node *prev = nullptr;
+    
+    while(curr_l1 != head && curr_l2 != l2.head){
+      if(curr_l1->value < curr_l2->value){
+        Node *aux = curr_l1;
+        curr_l1->prev->next = curr_l1->next;
+        curr_l1->next->prev = curr_l1->prev;
+        curr_l1 = curr_l1->next;
+        delete aux;
+        num_elems--;
+      }else if(curr_l1->value > curr_l2->value){
+        curr_l2 = curr_l2->next;
+      }else{
+        curr_l1 = curr_l1->next;
+        curr_l2 = curr_l2->next;
+      }
+    }
+
+    while (curr_l1 != head)
+    {
+      Node *aux = curr_l1;
+      curr_l1->prev->next = curr_l1->next;
+      curr_l1->next->prev = curr_l1->prev;
+      curr_l1 = curr_l1->next;
+      delete aux;
+      if(prev == nullptr)
+        head->next = curr_l1;
+      else
+        prev->next = curr_l1;
+      num_elems--;
+    }
     
   }
 
@@ -232,7 +265,9 @@ bool tratar_caso() {
       l2.push_back(elem);
     }
 
+    l1.intersection(l2);
 
+    cout << l1 << endl;
   }
 
 
