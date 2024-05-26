@@ -6,7 +6,7 @@
  *         Universidad Complutense de Madrid
  * ---------------------------------------------------
  */
- 
+
 /*
  * MUY IMPORTANTE: Para realizar este ejercicio solo podéis
  * modificar el código contenido entre las etiquetas <answer>
@@ -16,16 +16,15 @@
  * Tampoco esta permitido modificar las líneas que contienen
  * las etiquetas <answer> y </answer>, obviamente :-)
  */
- 
+
 //@ <answer>
 /*
   Introduce aquí los nombres de los componentes del grupo:
-  
+
   Componente 1:
   Componente 2:
 */
 //@ </answer>
-
 
 #include <iostream>
 #include <cassert>
@@ -33,44 +32,55 @@
 
 using namespace std;
 
-class ListLinkedDouble {
+class ListLinkedDouble
+{
 private:
-  struct Node {
+  struct Node
+  {
     int value;
     Node *next;
     Node *prev;
   };
 
 public:
-  ListLinkedDouble() : num_elems(0) {
+  ListLinkedDouble() : num_elems(0)
+  {
     head = new Node;
     head->next = head;
     head->prev = head;
   }
 
-  ListLinkedDouble(const ListLinkedDouble &other) : ListLinkedDouble() {
+  ListLinkedDouble(const ListLinkedDouble &other) : ListLinkedDouble()
+  {
     copy_nodes_from(other);
     num_elems = other.num_elems;
   }
 
   ~ListLinkedDouble() { delete_nodes(); }
 
-  void intersection(const ListLinkedDouble &l2){
+  void intersection(const ListLinkedDouble &l2)
+  {
     Node *curr_l1 = head->next;
     Node *curr_l2 = l2.head->next;
     Node *prev = nullptr;
-    
-    while(curr_l1 != head && curr_l2 != l2.head){
-      if(curr_l1->value < curr_l2->value){
+
+    while (curr_l1 != head && curr_l2 != l2.head)
+    {
+      if (curr_l1->value < curr_l2->value)
+      {
         Node *aux = curr_l1;
         curr_l1->prev->next = curr_l1->next;
         curr_l1->next->prev = curr_l1->prev;
         curr_l1 = curr_l1->next;
         delete aux;
         num_elems--;
-      }else if(curr_l1->value > curr_l2->value){
+      }
+      else if (curr_l1->value > curr_l2->value)
+      {
         curr_l2 = curr_l2->next;
-      }else{
+      }
+      else
+      {
         curr_l1 = curr_l1->next;
         curr_l2 = curr_l2->next;
       }
@@ -83,30 +93,32 @@ public:
       curr_l1->next->prev = curr_l1->prev;
       curr_l1 = curr_l1->next;
       delete aux;
-      if(prev == nullptr)
+      if (prev == nullptr)
         head->next = curr_l1;
       else
         prev->next = curr_l1;
       num_elems--;
     }
-    
   }
 
-  void push_front(const int &elem) {
+  void push_front(const int &elem)
+  {
     Node *new_node = new Node{elem, head->next, head};
     head->next->prev = new_node;
     head->next = new_node;
     num_elems++;
   }
 
-  void push_back(const int &elem) {
+  void push_back(const int &elem)
+  {
     Node *new_node = new Node{elem, head, head->prev};
     head->prev->next = new_node;
     head->prev = new_node;
     num_elems++;
   }
 
-  void pop_front() {
+  void pop_front()
+  {
     assert(num_elems > 0);
     Node *target = head->next;
     head->next = target->next;
@@ -115,7 +127,8 @@ public:
     num_elems--;
   }
 
-  void pop_back() {
+  void pop_back()
+  {
     assert(num_elems > 0);
     Node *target = head->prev;
     target->prev->next = head;
@@ -128,40 +141,48 @@ public:
 
   bool empty() const { return num_elems == 0; };
 
-  const int &front() const {
+  const int &front() const
+  {
     assert(num_elems > 0);
     return head->next->value;
   }
 
-  int &front() {
+  int &front()
+  {
     assert(num_elems > 0);
     return head->next->value;
   }
 
-  const int &back() const {
+  const int &back() const
+  {
     assert(num_elems > 0);
     return head->prev->value;
   }
 
-  int &back() {
+  int &back()
+  {
     assert(num_elems > 0);
     return head->prev->value;
   }
 
-  const int &operator[](int index) const {
+  const int &operator[](int index) const
+  {
     assert(0 <= index && index < num_elems);
     Node *result_node = nth_node(index);
     return result_node->value;
   }
 
-  int &operator[](int index) {
+  int &operator[](int index)
+  {
     assert(0 <= index && index < num_elems);
     Node *result_node = nth_node(index);
     return result_node->value;
   }
 
-  ListLinkedDouble &operator=(const ListLinkedDouble &other) {
-    if (this != &other) {
+  ListLinkedDouble &operator=(const ListLinkedDouble &other)
+  {
+    if (this != &other)
+    {
       delete_nodes();
       head = new Node;
       head->next = head->prev = head;
@@ -182,18 +203,20 @@ private:
   Node *nth_node(int n) const;
   void delete_nodes();
   void copy_nodes_from(const ListLinkedDouble &other);
-  
+
   // Nuevos métodos
   // Se implementan más abajo
-  static void attach(Node *node, Node *before);  
+  static void attach(Node *node, Node *before);
   static void detach(Node *node);
 };
 
-ListLinkedDouble::Node *ListLinkedDouble::nth_node(int n) const {
+ListLinkedDouble::Node *ListLinkedDouble::nth_node(int n) const
+{
   int current_index = 0;
   Node *current = head->next;
 
-  while (current_index < n && current != head) {
+  while (current_index < n && current != head)
+  {
     current_index++;
     current = current->next;
   }
@@ -201,9 +224,11 @@ ListLinkedDouble::Node *ListLinkedDouble::nth_node(int n) const {
   return current;
 }
 
-void ListLinkedDouble::delete_nodes() {
+void ListLinkedDouble::delete_nodes()
+{
   Node *current = head->next;
-  while (current != head) {
+  while (current != head)
+  {
     Node *target = current;
     current = current->next;
     delete target;
@@ -212,11 +237,13 @@ void ListLinkedDouble::delete_nodes() {
   delete head;
 }
 
-void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble &other) {
+void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble &other)
+{
   Node *current_other = other.head->next;
   Node *last = head;
 
-  while (current_other != other.head) {
+  while (current_other != other.head)
+  {
     Node *new_node = new Node{current_other->value, head, last};
     last->next = new_node;
     last = new_node;
@@ -225,12 +252,15 @@ void ListLinkedDouble::copy_nodes_from(const ListLinkedDouble &other) {
   head->prev = last;
 }
 
-void ListLinkedDouble::display(std::ostream &out) const {
+void ListLinkedDouble::display(std::ostream &out) const
+{
   out << "[";
-  if (head->next != head) {
+  if (head->next != head)
+  {
     out << head->next->value;
     Node *current = head->next->next;
-    while (current != head) {
+    while (current != head)
+    {
       out << ", " << current->value;
       current = current->next;
     }
@@ -238,14 +268,15 @@ void ListLinkedDouble::display(std::ostream &out) const {
   out << "]";
 }
 
-std::ostream &operator<<(std::ostream &out, const ListLinkedDouble &l) {
+std::ostream &operator<<(std::ostream &out, const ListLinkedDouble &l)
+{
   l.display(out);
   return out;
 }
-//}}}  
+//}}}
 
-
-bool tratar_caso() {
+bool tratar_caso()
+{
   // Introduce aquí el código para tratar un caso de prueba.
   // Devuelve false si se ha leído la marca de fin de entrada;
   // true en caso contrario.
@@ -254,14 +285,17 @@ bool tratar_caso() {
 
   cin >> numCasos;
 
-  for(int i = 0; i < numCasos; ++i){
+  for (int i = 0; i < numCasos; ++i)
+  {
     ListLinkedDouble l1, l2;
     int elem;
-    while(cin >> elem && elem != 0){
+    while (cin >> elem && elem != 0)
+    {
       l1.push_back(elem);
     }
-  
-    while(cin >> elem && elem != 0){
+
+    while (cin >> elem && elem != 0)
+    {
       l2.push_back(elem);
     }
 
@@ -269,9 +303,6 @@ bool tratar_caso() {
 
     cout << l1 << endl;
   }
-
-
-
   return false;
 }
 
@@ -280,19 +311,21 @@ bool tratar_caso() {
 // --------------------------------------------------------------
 //@ </answer>
 
+int main()
+{
+  /* #ifndef DOMJUDGE
+    std::ifstream in("sample.in");
+    auto cinbuf = std::cin.rdbuf(in.rdbuf());
+  #endif */
 
-int main() {
-/* #ifndef DOMJUDGE
-  std::ifstream in("sample.in");
-  auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
-  
-  while(tratar_caso()) { }
+  while (tratar_caso())
+  {
+  }
 
-/* #ifndef DOMJUDGE
-  std::cin.rdbuf(cinbuf);
-  // Descomentar si se trabaja en Windows
-  // system("PAUSE");
-#endif */
+  /* #ifndef DOMJUDGE
+    std::cin.rdbuf(cinbuf);
+    // Descomentar si se trabaja en Windows
+    // system("PAUSE");
+  #endif */
   return 0;
 }
