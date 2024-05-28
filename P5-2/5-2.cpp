@@ -3,8 +3,7 @@
  *                ESTRUCTURAS DE DATOS
  * ---------------------------------------------------
  */
- 
- 
+
 /*
  * Introduce el nombre y apellidos de los/as componentes del grupo:
  *
@@ -17,31 +16,42 @@
 #include <fstream>
 #include <list>
 
-
 using namespace std;
 
-
-bool es_toeplitz(const list<list<int>> &matriz) {
+bool es_toeplitz(const list<list<int>> &matriz)
+{
   // Implementar
 }
 
-bool tratar_caso() {
-  // Implementar
+bool tratar_caso()
+{
+  
+
+  /* if (es_toeplitz(matriz)) {
+    cout << "SI" << endl;
+  } else {
+    cout << "NO" << endl;
+  } */
+
+  return true;
 }
 
-int main() {
-#ifndef DOMJUDGE
-  std::ifstream in("sample.in");
-  auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+int main()
+{
+  /* #ifndef DOMJUDGE
+    std::ifstream in("sample.in");
+    auto cinbuf = std::cin.rdbuf(in.rdbuf());
+  #endif */
 
-  while (tratar_caso()) { }
+  while (tratar_caso())
+  {
+  }
 
-#ifndef DOMJUDGE
-  std::cin.rdbuf(cinbuf);
-  // Descomentar si se trabaja en Windows
-  // system("PAUSE");
-#endif
+  /* #ifndef DOMJUDGE
+    std::cin.rdbuf(cinbuf);
+    // Descomentar si se trabaja en Windows
+    // system("PAUSE");
+  #endif */
 
   return 0;
 }

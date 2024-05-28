@@ -67,6 +67,20 @@ ostream &operator<<(ostream &out, const Plato &plato) {
 
 // Indica el coste en función del tamaño del parámetro de entrada
 void ordenar_menu(list<Plato> &platos) {
+  auto it = platos.begin();
+  auto it_sig = ++platos.begin();
+
+  while (it_sig != platos.end()) {
+    if (it->categoria > it_sig->categoria) {
+      platos.splice(it, platos, it_sig);
+      it = platos.begin();
+      it_sig = ++platos.begin();
+    } else {
+      ++it;
+      ++it_sig;
+    }
+  }
+
 }
 
 
@@ -75,6 +89,53 @@ bool tratar_caso() {
   // Devuelve false si ya no hay más casos de prueba que leer,
   // true en caso contrario.
 
+  int n;  // Número de platos del menú
+
+  cin >> n;
+
+  if (n == 0) return false;
+
+  list<Plato> platos;
+
+  for (int i = 0; i < n; ++i){
+    Plato p;
+    char c;
+    string nombre;
+    cin >> c;
+    switch (c)
+    {
+    case '1': // es un primer plato
+      p.categoria = Categoria::Primero;
+      getline(cin, nombre);
+      p.nombre = nombre;
+      platos.push_back(p);
+      break;
+    case '2': // es un segundo
+      p.categoria = Categoria::Segundo;
+      getline(cin, nombre);
+      p.nombre = nombre;
+      platos.push_back(p);
+      break;
+    case 'P': // es un postre
+      p.categoria = Categoria::Postre;
+      getline(cin, nombre);
+      p.nombre = nombre;
+      platos.push_back(p);
+      break;
+    default:
+      break;
+    }
+  }
+
+  ordenar_menu(platos);
+
+  for (const Plato &p : platos) {
+    cout << p << '\n';
+  }
+
+  cout << "---\n";
+
+  return true;
 }
 
 
@@ -85,18 +146,18 @@ bool tratar_caso() {
 
 
 int main() {
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+#endif */
   
   while (tratar_caso()) {  }
 
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
   // Descomentar si se trabaja en Windows
   // system("PAUSE");
-#endif
+#endif */
   return 0;
 }
 

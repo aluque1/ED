@@ -18,11 +18,32 @@
 #include <fstream>
 #include <cassert>
 #include <list>
+#include <cstdlib>
 
 using namespace std;
 
 void suavizar(list<int> &l) {
-  // Implementa aquí la función pedida
+  auto it = l.begin();
+  auto it_sig = ++l.begin();
+
+  while (it_sig != l.end()) {
+    if((*it - *it_sig == 1) || (*it - *it_sig == -1)){ // diferencia de 1
+      ++it;
+      ++it_sig;
+    }
+    else if(*it == *it_sig){
+      it_sig = l.erase(it_sig);
+    }
+    else if(*it + 1 < *it_sig){
+      l.insert(it_sig, *it + 1);
+      --it_sig;
+    }
+    else if(*it > *it_sig + 1){
+      l.insert(it_sig, *it_sig + 1);
+      --it_sig;
+    }
+  }
+  
 }
 
 bool tratar_caso() {
@@ -46,18 +67,21 @@ bool tratar_caso() {
   for (int elem : l) {
     cout << elem << " ";
   }
+  cout << endl;
+
+  return true;
 }
 
 int main() {
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif
+#endif */
 
   while (tratar_caso()) { }
 
-#ifndef DOMJUDGE
+/* #ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif
+#endif */
   return 0;
 }
