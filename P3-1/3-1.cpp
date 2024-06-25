@@ -258,7 +258,6 @@ void ListLinkedDouble::add_to(int index, int val) {
   }
 }
 
-
 //}}}  
 
 
@@ -266,7 +265,6 @@ bool tratar_caso() {
   // Introduce aquí el código para tratar un caso de prueba.
   // Devuelve false si se ha leído la marca de fin de entrada;
   // true en caso contrario.
-
   int N, i, m;
 
   cin >> N;
@@ -299,17 +297,17 @@ bool tratar_caso() {
 
 
 int main() {
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
+#endif
   
   while(tratar_caso()) { }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
   // Descomentar si se trabaja en Windows
   // system("PAUSE");
-#endif */
+#endif
   return 0;
 }

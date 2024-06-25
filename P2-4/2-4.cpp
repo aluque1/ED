@@ -262,10 +262,10 @@ void tratar_caso() {
 // ----------------------------------------------------------------
 
 int main() {
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
+#endif
 
   // Leemos el número de casos de prueba que vendrán a continuación
   int num_casos;
@@ -278,9 +278,9 @@ int main() {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
  // system("PAUSE");
-#endif */
+#endif
   return 0;
 }

@@ -6,8 +6,8 @@
  *         Universidad Complutense de Madrid
  * ---------------------------------------------------
  */
- 
- /*
+
+/*
  * MUY IMPORTANTE: Para realizar este ejercicio solo podéis
  * modificar el código contenido entre las etiquetas <answer>
  * y </answer>. Toda modificación fuera de esas etiquetas está
@@ -16,7 +16,6 @@
  * Tampoco esta permitido modificar las líneas que contienen
  * las etiquetas <answer> y </answer>, obviamente :-)
  */
-
 
 //@ <answer>
 /*
@@ -36,31 +35,36 @@ using namespace std;
 
 // Implementación del TAD lista utilizando listas enlazadas simples.
 
-class ListLinkedSingle {
+class ListLinkedSingle
+{
 private:
-  struct Node {
+  struct Node
+  {
     int value;
     Node *next;
   };
 
 public:
-  ListLinkedSingle(): head(nullptr) { }
-  ~ListLinkedSingle() {
+  ListLinkedSingle() : head(nullptr) {}
+  ~ListLinkedSingle()
+  {
     delete_list(head);
   }
 
   ListLinkedSingle(const ListLinkedSingle &other)
-    : head(copy_nodes(other.head)) { }
+      : head(copy_nodes(other.head)) {}
 
-  void push_front(const int &elem) {
-    Node *new_node = new Node { elem, head };
+  void push_front(const int &elem)
+  {
+    Node *new_node = new Node{elem, head};
     head = new_node;
   }
 
   void push_back(const int &elem);
 
-  void pop_front() {
-    assert (head != nullptr);
+  void pop_front()
+  {
+    assert(head != nullptr);
     Node *old_head = head;
     head = head->next;
     delete old_head;
@@ -70,37 +74,44 @@ public:
 
   int size() const;
 
-  bool empty() const {
+  bool empty() const
+  {
     return head == nullptr;
   };
-  
-  const int & front() const {
-    assert (head != nullptr);
+
+  const int &front() const
+  {
+    assert(head != nullptr);
     return head->value;
   }
 
-  int & front() {
-    assert (head != nullptr);
+  int &front()
+  {
+    assert(head != nullptr);
     return head->value;
   }
 
-  const int & back() const {
+  const int &back() const
+  {
     return last_node()->value;
   }
 
-  int & back() {
+  int &back()
+  {
     return last_node()->value;
   }
-  
-  const int & at(int index) const {
+
+  const int &at(int index) const
+  {
     Node *result_node = nth_node(index);
-    assert (result_node != nullptr);
+    assert(result_node != nullptr);
     return result_node->value;
   }
 
-  int & at(int index) {
+  int &at(int index)
+  {
     Node *result_node = nth_node(index);
-    assert (result_node != nullptr);
+    assert(result_node != nullptr);
     return result_node->value;
   }
 
@@ -109,7 +120,8 @@ public:
   void replicate(const ListLinkedSingle &ys);
 
   void display(std::ostream &out) const;
-  void display() const {
+  void display() const
+  {
     display(std::cout);
   }
 
@@ -120,44 +132,58 @@ private:
   Node *last_node() const;
   Node *nth_node(int n) const;
   Node *copy_nodes(Node *start_node) const;
-
 };
 
-ListLinkedSingle::Node * ListLinkedSingle::copy_nodes(Node *start_node) const {
-  if (start_node != nullptr) {
-    Node *result = new Node { start_node->value, copy_nodes(start_node->next) };
+ListLinkedSingle::Node *ListLinkedSingle::copy_nodes(Node *start_node) const
+{
+  if (start_node != nullptr)
+  {
+    Node *result = new Node{start_node->value, copy_nodes(start_node->next)};
     return result;
-  } else {
+  }
+  else
+  {
     return nullptr;
   }
 }
 
-void ListLinkedSingle::delete_list(Node *start_node) {
-  if (start_node != nullptr) {
+void ListLinkedSingle::delete_list(Node *start_node)
+{
+  if (start_node != nullptr)
+  {
     delete_list(start_node->next);
     delete start_node;
   }
 }
 
-void ListLinkedSingle::push_back(const int &elem) {
-  Node *new_node = new Node { elem, nullptr };
-  if (head == nullptr) {
+void ListLinkedSingle::push_back(const int &elem)
+{
+  Node *new_node = new Node{elem, nullptr};
+  if (head == nullptr)
+  {
     head = new_node;
-  } else {
+  }
+  else
+  {
     last_node()->next = new_node;
   }
 }
 
-void ListLinkedSingle::pop_back() {
-  assert (head != nullptr);
-  if (head->next == nullptr) {
+void ListLinkedSingle::pop_back()
+{
+  assert(head != nullptr);
+  if (head->next == nullptr)
+  {
     delete head;
     head = nullptr;
-  } else {
+  }
+  else
+  {
     Node *previous = head;
     Node *current = head->next;
 
-    while (current->next != nullptr) {
+    while (current->next != nullptr)
+    {
       previous = current;
       current = current->next;
     }
@@ -167,11 +193,13 @@ void ListLinkedSingle::pop_back() {
   }
 }
 
-int ListLinkedSingle::size() const {
+int ListLinkedSingle::size() const
+{
   int num_nodes = 0;
 
   Node *current = head;
-  while (current != nullptr) {
+  while (current != nullptr)
+  {
     num_nodes++;
     current = current->next;
   }
@@ -179,22 +207,25 @@ int ListLinkedSingle::size() const {
   return num_nodes;
 }
 
-
-ListLinkedSingle::Node * ListLinkedSingle::last_node() const {
-  assert (head != nullptr);
+ListLinkedSingle::Node *ListLinkedSingle::last_node() const
+{
+  assert(head != nullptr);
   Node *current = head;
-  while (current->next != nullptr) {
+  while (current->next != nullptr)
+  {
     current = current->next;
   }
   return current;
 }
 
-ListLinkedSingle::Node * ListLinkedSingle::nth_node(int n) const {
-  assert (0 <= n);
+ListLinkedSingle::Node *ListLinkedSingle::nth_node(int n) const
+{
+  assert(0 <= n);
   int current_index = 0;
   Node *current = head;
 
-  while (current_index < n && current != nullptr) {
+  while (current_index < n && current != nullptr)
+  {
     current_index++;
     current = current->next;
   }
@@ -202,12 +233,15 @@ ListLinkedSingle::Node * ListLinkedSingle::nth_node(int n) const {
   return current;
 }
 
-void ListLinkedSingle::display(std::ostream &out) const {
+void ListLinkedSingle::display(std::ostream &out) const
+{
   out << "[";
-  if (head != nullptr) {
+  if (head != nullptr)
+  {
     out << head->value;
     Node *current = head->next;
-    while (current != nullptr) {
+    while (current != nullptr)
+    {
       out << ", " << current->value;
       current = current->next;
     }
@@ -215,21 +249,75 @@ void ListLinkedSingle::display(std::ostream &out) const {
   out << "]";
 }
 
-
 //@ <answer>
 // ===========================================================
 // Escribe tu solución por debajo de esta línea
 // ===========================================================
 
 // Implementa aquí la función pedida. No olvides indicar el coste.
-void ListLinkedSingle::replicate(const ListLinkedSingle &ys) {
+void ListLinkedSingle::replicate(const ListLinkedSingle &ys)
+{
+  Node *cur1 = head;
+  Node *cur2 = ys.head;
+  Node *prev = nullptr;
 
+  while (cur1 != nullptr && cur2 != nullptr)
+  {
+    if (cur2->value == 0)
+    {
+      Node *temp = cur1;
+      cur1 = cur1->next;
+      cur2 = cur2->next;
+      delete temp;
+      if (prev == nullptr)
+        head = cur1;
+      else
+        prev->next = cur1;
+    }
+    else if (cur2->value > 1)
+    {
+      int rep = cur2->value;
+      for (int i = 1; i < rep; ++i)
+      {
+        Node *new_node = new Node{cur1->value, cur1->next};
+        cur1->next = new_node;
+        cur1 = new_node;
+      }
+      cur1 = cur1->next;
+      cur2 = cur2->next;
+    }
+    else
+    {
+      prev = cur1;
+      cur1 = cur1->next;
+      cur2 = cur2->next;
+    }
+  }
 }
 
+void tratar_caso()
+{
+  int n, x;
+  cin >> n;
+  ListLinkedSingle xs, ys;
 
+  for (int i = 0; i < n; ++i)
+  {
+    cin >> x;
+    xs.push_back(x);
+  }
 
-void tratar_caso() {
-  // Escribe aquí el código para tratar UN caso de prueba
+  for (int i = 0; i < n; ++i)
+  {
+    cin >> x;
+    ys.push_back(x);
+  }
+
+  xs.replicate(ys);
+
+  xs.display();
+
+  cout << endl;
 }
 
 //@ </answer>
@@ -237,26 +325,25 @@ void tratar_caso() {
 // No modifiques nada por debajo de esta línea
 // ===========================================================
 
-
-int main() {
-/* #ifndef DOMJUDGE
+int main()
+{
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
-  
+#endif
+
   // El primer dato leído indica el número de casos de prueba
   int num_casos;
   cin >> num_casos;
 
   // Llamamos a tratar_caso tantas veces como indica num_caso
-  for (int i = 0; i < num_casos; i++) {
+  for (int i = 0; i < num_casos; i++)
+  {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif */
+#endif
   return 0;
 }
-
-

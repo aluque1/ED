@@ -13,14 +13,18 @@
   *
   * Versión inicial.
   */
-#include <cassert>
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <sstream>
+#include <cassert>
+
+using namespace std;
 
 class ListLinkedSingle {
 private:
   struct Node {
-    std::string value;
+    int value;
     Node *next;
   };
 
@@ -30,12 +34,12 @@ public:
     delete_list(head);
   }
 
-  void push_front(const std::string &elem) {
+  void push_front(const int &elem) {
     Node *new_node = new Node { elem, head };
     head = new_node;
   }
 
-  void push_back(const std::string &elem);
+  void push_back(const int &elem);
 
   void pop_front() {
     assert (head != nullptr);
@@ -52,31 +56,31 @@ public:
     return head == nullptr;
   };
   
-  const std::string & front() const {
+  const int & front() const {
     assert (head != nullptr);
     return head->value;
   }
 
-  std::string & front() {
+  int & front() {
     assert (head != nullptr);
     return head->value;
   }
 
-  const std::string & back() const {
+  const int & back() const {
     return last_node()->value;
   }
 
-  std::string & back() {
+  int & back() {
     return last_node()->value;
   }
   
-  const std::string & at(int index) const {
+  const int & at(int index) const {
     Node *result_node = nth_node(index);
     assert (result_node != nullptr);
     return result_node->value;
   }
 
-  std::string & at(int index) {
+  int & at(int index) {
     Node *result_node = nth_node(index);
     assert (result_node != nullptr);
     return result_node->value;
@@ -105,7 +109,7 @@ void ListLinkedSingle::delete_list(Node *start_node) {
   }
 }
 
-void ListLinkedSingle::push_back(const std::string &elem) {
+void ListLinkedSingle::push_back(const int &elem) {
   Node *new_node = new Node { elem, nullptr };
   if (head == nullptr) {
     head = new_node;
@@ -193,4 +197,52 @@ void ListLinkedSingle::reverse(){
   }
   head = prev;
 }
+
+
+//@ <answer>
+// ===========================================================
+// Escribe tu solución por debajo de esta línea
+// ===========================================================
+
+// ¡No te olvides del coste!
+// La funcion duplicate tiene coste O(n) siendo n el numero de elementos de la lista
+void tratar_caso() {
+  int n;
+  ListLinkedSingle lista;
+  
+  while((cin >> n) && n != 0){
+    lista.push_back(n);
+  }
+
+  lista.reverse();
+  lista.display();
+  cout << endl;
+}
+
+int main() {
+#ifndef DOMJUDGE
+  std::ifstream in("sample.in");
+  auto cinbuf = std::cin.rdbuf(in.rdbuf());
+#endif
+  
+  // El primer dato leído indica el número de casos de prueba
+  int num_casos;
+  cin >> num_casos;
+  // El puntero de lectura ahora mismo se sitúa detrás del número de casos de prueba
+  // Si se queda ahí, la próxima llamada a getline() leería el resto de esa línea, que
+  // no es lo que queremos. Por tanto, avanzamos la lectura de la entrada hasta el
+  // fin de línea.
+  cin.ignore(10, '\n');
+
+  // Llamamos a tratar_caso tantas veces como indica num_caso
+  for (int i = 0; i < num_casos; i++) {
+    tratar_caso();
+  }
+
+#ifndef DOMJUDGE
+  std::cin.rdbuf(cinbuf);
+#endif
+  return 0;
+}
+
 

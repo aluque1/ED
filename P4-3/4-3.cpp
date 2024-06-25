@@ -21,7 +21,7 @@
 /*
   Indica el nombre y apellidos de los componentes del grupo
   ---------------------------------------------------------
-  Componente 1: Jose Villacres Zumaeta C109
+  Componente 1:
   Componente 2:
 */
 //@ </answer>
@@ -141,10 +141,10 @@ void tratar_caso()
 
 int main()
 {
-  /* #ifndef DOMJUDGE
+  #ifndef DOMJUDGE
     std::ifstream in("sample.in");
     auto cinbuf = std::cin.rdbuf(in.rdbuf());
-  #endif */
+  #endif
 
   // El primer dato leído indica el número de casos de prueba
   int num_casos;
@@ -161,8 +161,8 @@ int main()
     tratar_caso();
   }
 
-  /* #ifndef DOMJUDGE
+  #ifndef DOMJUDGE
     std::cin.rdbuf(cinbuf);
-  #endif */
+  #endif
   return 0;
 }

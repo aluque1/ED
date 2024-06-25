@@ -301,19 +301,19 @@ bool tratar_caso()
 
 int main()
 {
-  /* #ifndef DOMJUDGE
+  #ifndef DOMJUDGE
     std::ifstream in("sample.in");
     auto cinbuf = std::cin.rdbuf(in.rdbuf());
-  #endif */
+  #endif
 
   while (tratar_caso())
   {
   }
 
-  /* #ifndef DOMJUDGE
+  #ifndef DOMJUDGE
     std::cin.rdbuf(cinbuf);
     // Descomentar si se trabaja en Windows
     // system("PAUSE");
-  #endif */
+  #endif
   return 0;
 }

@@ -57,22 +57,22 @@ bool resuelveCaso()
 
 int main()
 {
-/*   // ajustes para que cin extraiga directamente de un fichero
+// ajustes para que cin extraiga directamente de un fichero
 #ifndef DOMJUDGE
   std::ifstream in("casos.txt");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
   std::ofstream out("datos.out");
   auto coutbuf = std::cout.rdbuf(out.rdbuf());
-#endif */
+#endif
 
   while (resuelveCaso())
     ;
 
-/*     // para dejar todo como estaba al principio
+// para dejar todo como estaba al principio
 #ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
   std::cout.rdbuf(coutbuf);
   //system("PAUSE");
-#endif */
+#endif
   return 0;
 }
