@@ -30,7 +30,6 @@
 #include <fstream>
 #include <cassert>
 #include <memory>
-#include <utility>
 
 template <class T>
 class BinTree
@@ -140,7 +139,6 @@ BinTree<T> read_tree(std::istream &in)
 
 using namespace std;
 
-
 // ----------------------------------------------------------------
 // Escribe tu solución a continuación.
 //
@@ -149,47 +147,67 @@ using namespace std;
 // de ellas.
 //@ <answer>
 
-// primer elemento del pair si es completo y el segundo la altura
-pair<bool, int> es_completo(const BinTree<bool> &t) {
-  if (t.empty()) {
-    return {true, 0};
-  } else {
-    auto left = es_completo(t.left());
-    auto right = es_completo(t.right());
-    if (left.first and right.first and left.second == right.second) {
-      return {true, 1 + left.second};
-    } else {
-      return {false, 0};
-    }
+struct sol
+{
+  bool completo;
+  bool semicompleto;
+  int altura;
+};
+
+// Implementa la función pedida aquí. ¡No te olvides del coste!
+sol completo(const BinTree<char> &tree)
+{
+  if (tree.empty()) // CB: arbol vacio -> true, true, 0
+    return {true, true, 0};
+  else
+  { // CR:
+    sol iz = completo(tree.left());
+    sol dr = completo(tree.right());
+    if(iz.completo && dr.completo && (iz.altura == dr.altura)) // es un arbol completo si sus hijos son completos y la altura de su hijo iz y su hijo dr es la misma 
+      return {true, true, iz.altura + 1};
+    else if(iz.semicompleto && dr.completo && (iz.altura == dr.altura + 1)) // es un arbol semicompleto 
+      return {false, true, iz.altura + 1};
+    else if(iz.completo && dr.semicompleto && (iz.altura == dr.altura))
+      return {false, true, iz.altura + 1};
+    else 
+      return {false, false, iz.altura};
   }
 }
+
 //@ </answer>
 // No modifiques nada por debajo de esta línea
 // ----------------------------------------------------------------
 
-
-void tratar_caso() {
+void tratar_caso()
+{
   // Leemos un árbol de la entrada
-  BinTree<bool> t = read_tree<bool>(cin);
-
-  
+  BinTree<char> t = read_tree<char>(cin);
+  sol s = completo(t);
+  if(s.completo)
+    cout << "COMPLETO\n";
+  else if(s.semicompleto)
+    cout << "SEMICOMPLETO\n";
+  else
+    cout << "NADA\n";
 }
 
-int main() {
-/* #ifndef DOMJUDGE
+int main()
+{
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
-  
+#endif
+
   int num_casos;
   cin >> num_casos;
 
-  for (int i = 0; i < num_casos; i++) {
+  for (int i = 0; i < num_casos; i++)
+  {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif */
+#endif
   return 0;
 }

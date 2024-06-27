@@ -6,8 +6,8 @@
  *         Universidad Complutense de Madrid
  * ---------------------------------------------------
  */
- 
- /*
+
+/*
  * MUY IMPORTANTE: Para realizar este ejercicio solo podéis
  * modificar el código contenido entre las etiquetas <answer>
  * y </answer>. Toda modificación fuera de esas etiquetas está
@@ -16,7 +16,6 @@
  * Tampoco esta permitido modificar las líneas que contienen
  * las etiquetas <answer> y </answer>, obviamente :-)
  */
-
 
 //@ <answer>
 /*
@@ -31,11 +30,10 @@
 #include <fstream>
 #include <cassert>
 #include <memory>
-#include <tuple>
-#include <algorithm>
 
-
-template <class T> class BinTree {
+template <class T>
+class BinTree
+{
 public:
   BinTree() : root_node(nullptr) {}
 
@@ -48,19 +46,22 @@ public:
 
   bool empty() const { return root_node == nullptr; }
 
-  const T &root() const {
+  const T &root() const
+  {
     assert(root_node != nullptr);
     return root_node->elem;
   }
 
-  BinTree left() const {
+  BinTree left() const
+  {
     assert(root_node != nullptr);
     BinTree result;
     result.root_node = root_node->left;
     return result;
   }
 
-  BinTree right() const {
+  BinTree right() const
+  {
     assert(root_node != nullptr);
     BinTree result;
     result.root_node = root_node->right;
@@ -78,7 +79,8 @@ private:
   struct TreeNode;
   using NodePointer = std::shared_ptr<TreeNode>;
 
-  struct TreeNode {
+  struct TreeNode
+  {
     TreeNode(const NodePointer &left, const T &elem, const NodePointer &right)
         : elem(elem), left(left), right(right) {}
 
@@ -88,10 +90,14 @@ private:
 
   NodePointer root_node;
 
-  static void display_node(const NodePointer &root, std::ostream &out) {
-    if (root == nullptr) {
+  static void display_node(const NodePointer &root, std::ostream &out)
+  {
+    if (root == nullptr)
+    {
       out << ".";
-    } else {
+    }
+    else
+    {
       out << "(";
       display_node(root->left, out);
       out << " " << root->elem << " ";
@@ -102,17 +108,23 @@ private:
 };
 
 template <typename T>
-std::ostream &operator<<(std::ostream &out, const BinTree<T> &tree) {
+std::ostream &operator<<(std::ostream &out, const BinTree<T> &tree)
+{
   tree.display(out);
   return out;
 }
 
-template <typename T> BinTree<T> read_tree(std::istream &in) {
+template <typename T>
+BinTree<T> read_tree(std::istream &in)
+{
   char c;
   in >> c;
-  if (c == '.') {
+  if (c == '.')
+  {
     return BinTree<T>();
-  } else {
+  }
+  else
+  {
     assert(c == '(');
     BinTree<T> left = read_tree<T>(in);
     T elem;
@@ -127,7 +139,6 @@ template <typename T> BinTree<T> read_tree(std::istream &in) {
 
 using namespace std;
 
-
 // ----------------------------------------------------------------
 // Escribe tu solución a continuación.
 //
@@ -136,49 +147,54 @@ using namespace std;
 // de ellas.
 //@ <answer>
 
-// primer parametro de pair es el area acutal y el segundo el area maxima
-tuple<int, int, int> diametro_mayor(const BinTree<bool> &tree){
-  if(tree.empty()){
-    return {0, 0, 0};
-  }
-  auto left = diametro_mayor(tree.left());
-  auto right = diametro_mayor(tree.right());
-  int diametro = max({get<0>(left), get<0>(right), get<2>(left) + get<2>(right) + 1});
-  int altura = max(get<1>(left), get<1>(right)) + 1;
-  int area = max(get<1>(left) * get<1>(right), diametro);
-  return {diametro, altura, area};
-}
+struct sol{
+ int alutraCurr;
+ int alturaMax;
+};
 
 // Implementa la función pedida aquí. ¡No te olvides del coste!
-int diametro(const BinTree<bool> &tree) {
-  return get<2>(diametro_mayor(tree));
+sol diametro(const BinTree<char> &tree)
+{
+  if(tree.empty())                                      // CB: arbol vacio -> 0, 0
+    return {0, 0};
+  else if(tree.left().empty() && tree.right().empty())  // CB: es hoja -> 1, 1
+    return {1, 1};
+  else{                                                 // CR: 
+    sol iz = diametro(tree.left());
+    sol dr = diametro(tree.right());
+    return {max(iz.alutraCurr + 1, dr.alutraCurr + 1), max(iz.alutraCurr + dr.alutraCurr + 1, max(iz.alturaMax, dr.alturaMax))};
+  }
 }
 
 //@ </answer>
 // No modifiques nada por debajo de esta línea
 // ----------------------------------------------------------------
 
-
-void tratar_caso() {
+void tratar_caso()
+{
   // Leemos un árbol de la entrada
-  BinTree<bool> t = read_tree<bool>(cin);
+  BinTree<char> t = read_tree<char>(cin);
+  // Imprimimos el resultado tras llamar a area_mayor_sin_barreras
+  cout << diametro(t).alturaMax << endl;
 }
 
-int main() {
-/* #ifndef DOMJUDGE
+int main()
+{
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
-  
+#endif
+
   int num_casos;
   cin >> num_casos;
 
-  for (int i = 0; i < num_casos; i++) {
+  for (int i = 0; i < num_casos; i++)
+  {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif */
+#endif
   return 0;
 }

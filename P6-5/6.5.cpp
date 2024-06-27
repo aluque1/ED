@@ -107,22 +107,18 @@ std::ostream &operator<<(std::ostream &out, const BinTree<T> &tree) {
   return out;
 }
 
-template <typename T> BinTree<T> read_tree(std::istream &in) {
-  char c;
-  in >> c;
-  if (c == '.') {
-    return BinTree<T>();
-  } else {
-    assert(c == '(');
-    BinTree<T> left = read_tree<T>(in);
-    T elem;
-    in >> elem;
-    BinTree<T> right = read_tree<T>(in);
-    in >> c;
-    assert(c == ')');
-    BinTree<T> result(left, elem, right);
-    return result;
-  }
+// lee un árbol binario de la entrada estándar
+template <typename T>
+inline BinTree<T> readTree(T vacio) {
+   T raiz;
+   std::cin >> raiz;
+   if (raiz == vacio) { // es un árbol vacío
+      return {};
+   } else { // leer recursivamente los hijos
+      auto iz = readTree(vacio);
+      auto dr = readTree(vacio);
+      return {iz, raiz, dr};
+   }
 }
 
 using namespace std;
@@ -136,22 +132,27 @@ using namespace std;
 // de ellas.
 //@ <answer>
 
-// primer parametro de pair es el area acutal y el segundo el area maxima
-tuple<int, int, int> diametro_mayor(const BinTree<bool> &tree){
-  if(tree.empty()){
-    return {0, 0, 0};
-  }
-  auto left = diametro_mayor(tree.left());
-  auto right = diametro_mayor(tree.right());
-  int diametro = max({get<0>(left), get<0>(right), get<2>(left) + get<2>(right) + 1});
-  int altura = max(get<1>(left), get<1>(right)) + 1;
-  int area = max(get<1>(left) * get<1>(right), diametro);
-  return {diametro, altura, area};
-}
+struct sol{
+  int numBarcos;
+  int espacioRestante;
+};
 
-// Implementa la función pedida aquí. ¡No te olvides del coste!
-int diametro(const BinTree<bool> &tree) {
-  return get<2>(diametro_mayor(tree));
+sol onePiece(BinTree<int> tree, int capacidadBarcos){
+  if(tree.empty())                                      // CB : arbol vacio
+    return {0, capacidadBarcos};
+  else if(tree.left().empty() && tree.right().empty()){ // CB : hoja
+    int espacioRestante;
+    int numBarcos;
+    return {numBarcos, espacioRestante};
+  }
+  else{                                                 // CR : no es una hoja
+    sol iz = onePiece(tree.left(), capacidadBarcos);
+    sol dr = onePiece(tree.right(), capacidadBarcos);
+    int espacioRestante;
+    int numBarcos;
+    return {numBarcos, espacioRestante};
+  }
+
 }
 
 //@ </answer>
@@ -161,14 +162,21 @@ int diametro(const BinTree<bool> &tree) {
 
 void tratar_caso() {
   // Leemos un árbol de la entrada
-  BinTree<bool> t = read_tree<bool>(cin);
+  BinTree<int> tree;
+  tree = readTree(-1);
+  int capacidad;
+  cin >> capacidad;
+
+  // imprimir resultado
+  cout << onePiece(tree, capacidad).numBarcos << "\n";
+
 }
 
 int main() {
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
+#endif
   
   int num_casos;
   cin >> num_casos;
@@ -177,8 +185,8 @@ int main() {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif */
+#endif
   return 0;
 }

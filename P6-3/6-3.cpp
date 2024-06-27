@@ -6,8 +6,8 @@
  *         Universidad Complutense de Madrid
  * ---------------------------------------------------
  */
- 
- /*
+
+/*
  * MUY IMPORTANTE: Para realizar este ejercicio solo podéis
  * modificar el código contenido entre las etiquetas <answer>
  * y </answer>. Toda modificación fuera de esas etiquetas está
@@ -16,7 +16,6 @@
  * Tampoco esta permitido modificar las líneas que contienen
  * las etiquetas <answer> y </answer>, obviamente :-)
  */
-
 
 //@ <answer>
 /*
@@ -32,8 +31,9 @@
 #include <cassert>
 #include <memory>
 
-
-template <class T> class BinTree {
+template <class T>
+class BinTree
+{
 public:
   BinTree() : root_node(nullptr) {}
 
@@ -46,19 +46,22 @@ public:
 
   bool empty() const { return root_node == nullptr; }
 
-  const T &root() const {
+  const T &root() const
+  {
     assert(root_node != nullptr);
     return root_node->elem;
   }
 
-  BinTree left() const {
+  BinTree left() const
+  {
     assert(root_node != nullptr);
     BinTree result;
     result.root_node = root_node->left;
     return result;
   }
 
-  BinTree right() const {
+  BinTree right() const
+  {
     assert(root_node != nullptr);
     BinTree result;
     result.root_node = root_node->right;
@@ -76,7 +79,8 @@ private:
   struct TreeNode;
   using NodePointer = std::shared_ptr<TreeNode>;
 
-  struct TreeNode {
+  struct TreeNode
+  {
     TreeNode(const NodePointer &left, const T &elem, const NodePointer &right)
         : elem(elem), left(left), right(right) {}
 
@@ -86,10 +90,14 @@ private:
 
   NodePointer root_node;
 
-  static void display_node(const NodePointer &root, std::ostream &out) {
-    if (root == nullptr) {
+  static void display_node(const NodePointer &root, std::ostream &out)
+  {
+    if (root == nullptr)
+    {
       out << ".";
-    } else {
+    }
+    else
+    {
       out << "(";
       display_node(root->left, out);
       out << " " << root->elem << " ";
@@ -100,17 +108,23 @@ private:
 };
 
 template <typename T>
-std::ostream &operator<<(std::ostream &out, const BinTree<T> &tree) {
+std::ostream &operator<<(std::ostream &out, const BinTree<T> &tree)
+{
   tree.display(out);
   return out;
 }
 
-template <typename T> BinTree<T> read_tree(std::istream &in) {
+template <typename T>
+BinTree<T> read_tree(std::istream &in)
+{
   char c;
   in >> c;
-  if (c == '.') {
+  if (c == '.')
+  {
     return BinTree<T>();
-  } else {
+  }
+  else
+  {
     assert(c == '(');
     BinTree<T> left = read_tree<T>(in);
     T elem;
@@ -125,7 +139,6 @@ template <typename T> BinTree<T> read_tree(std::istream &in) {
 
 using namespace std;
 
-
 // ----------------------------------------------------------------
 // Escribe tu solución a continuación.
 //
@@ -134,75 +147,65 @@ using namespace std;
 // de ellas.
 //@ <answer>
 
-// primer parametro de pair es el area acutal y el segundo el area maxima
-pair<int, int> area_mayor(const BinTree<bool> &tree, int currArea, int areaMax){
-  int currentArea = currArea;
-  int maximumArea = areaMax;
-  pair<int, int> left = {0, 0};
-  pair<int, int> right = {0, 0};
+// Implementa la función pedida aquí. ¡No te olvides del coste!
+struct sol
+{
+  int areaAct;
+  int areaMax;
+};
 
-  if (tree.empty())
+sol diametro(const BinTree<bool> &tree)
+{
+  if (tree.empty())   // CB: Arbol vacio -> 0, 0
+    return {0, 0};
+  else if (tree.left().empty() && tree.right().empty())
   {
-    return {0, areaMax};
+    if (tree.root())  // CB: hoja y es nodo barrera (true) -> 0, 0
+      return {0, 0};
+    else              // CB: hoja y es nodovacio (false) -> 1, 1
+      return {1, 1};
   }
   else
-  {
-    if(tree.root() == false){
-      ++currentArea;
-    }
-    else{
-      if(currentArea > maximumArea){
-        maximumArea = currentArea;
-      }
-      currentArea = 0;
-    }
-    if(tree.left().empty()){
-      left = area_mayor(tree.left(), currentArea, maximumArea);
-    }
-    if(tree.right().empty())
-    {
-      right = area_mayor(tree.right(), currentArea, maximumArea);
-    }
-    int area = left.first + right.first + 1;
-    int areaMax = max(area, max(left.second, right.second));
-
-    return {area, areaMax};
+  {                   // CR: -> if nodo barrera -> 0, max(iz.areaMax, dr.areaMax) else -> areaAct, max(iz.areaMax, max(dr.areaMax, areaAct))
+    sol iz = diametro(tree.left());
+    sol dr = diametro(tree.right());
+    int areaAct = iz.areaAct + dr.areaAct + 1;
+    if (tree.root())  // Estamos en nodo barrera
+      return {0, max(iz.areaMax, dr.areaMax)};
+    else              // Estamos en nodo vacio
+      return {areaAct, max(iz.areaMax, max(dr.areaMax, areaAct))};
   }
-  
-}
-
-// Implementa la función pedida aquí. ¡No te olvides del coste!
-int area_mayor_sin_barreras(const BinTree<bool> &tree) {
-  return area_mayor(tree, 0, 0).second;
 }
 
 //@ </answer>
 // No modifiques nada por debajo de esta línea
 // ----------------------------------------------------------------
 
-
-void tratar_caso() {
+void tratar_caso()
+{
   // Leemos un árbol de la entrada
   BinTree<bool> t = read_tree<bool>(cin);
   // Imprimimos el resultado tras llamar a area_mayor_sin_barreras
-  cout << area_mayor_sin_barreras(t) << endl;
+  cout << diametro(t).areaMax << endl;
 }
 
-int main() {
-/* #ifndef DOMJUDGE
+int main()
+{
+#ifndef DOMJUDGE
   std::ifstream in("sample.in");
   auto cinbuf = std::cin.rdbuf(in.rdbuf());
-#endif */
-  
+#endif
+
   int num_casos;
   cin >> num_casos;
 
-  for (int i = 0; i < num_casos; i++) {
+  for (int i = 0; i < num_casos; i++)
+  {
     tratar_caso();
   }
 
-/* #ifndef DOMJUDGE
+#ifndef DOMJUDGE
   std::cin.rdbuf(cinbuf);
-#endif */
+#endif
   return 0;
 }
