@@ -1,0 +1,26 @@
+11
+#include <stdio.h>
+int main()
+  {
+  int x;
+  scanf("%d", &x);
+  if (x > 0)
+    {
+    printf("Valor positivo\n");
+    }
+  return 0;
+  }
+4
+int main()
+{ // <- Esta linea y las dos siguientes deben indentarse
+int x;
+}
+1
+  const int x = 3; // <- El nivel de indentacion inicial debe ser 0
+5
+int main()
+  {
+    int x; // <- La indentacion debe ser la misma que la de la llave '{'
+    x = 3;
+  }
+0

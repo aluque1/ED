@@ -1,0 +1,34 @@
+nuevo_participante juan 100
+nuevo_participante ana 160
+nueva_subasta funko_luffy 80
+nueva_subasta funko_goku 120
+nueva_subasta funko_sailor 10
+nueva_puja juan funko_luffy 90
+nueva_puja juan funko_sailor 10
+cerrar_subasta funko_sailor
+nueva_puja ana funko_luffy 85
+nueva_puja ana funko_goku 130
+cerrar_subasta funko_luffy
+nueva_puja ana funko_goku 130
+cerrar_subasta funko_goku
+subastas_ganadas juan
+FIN
+nuevo_participante juan 100
+nuevo_participante ana 160
+nueva_puja juan funko_pop 20
+nueva_subasta funko_pop -5
+nueva_subasta funko_luffy 80
+nueva_puja juan funko_luffy 90
+nueva_puja ana funko_luffy 90
+nueva_puja juan funko_luffy 10
+abandonar_casa juan
+cerrar_subasta funko_luffy
+FIN
+nuevo_participante juan 100
+nuevo_participante ana 160
+nueva_subasta funko_luffy 80
+nueva_puja juan funko_luffy 90
+nueva_puja ana funko_luffy 85
+abandonar_casa juan
+cerrar_subasta funko_luffy
+FIN
